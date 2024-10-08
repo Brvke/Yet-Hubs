@@ -1,0 +1,17 @@
+{% extends 'yet/base.html' %}
+
+{% block title %}Available Venues{% endblock %}
+
+{% block content %}
+    <h1>Venues list</h1>
+    <ul class="list-group">
+        {% for venue in venues %}
+            <li class="list-group-item">
+                <a href="{% url 'venue_detail' venue.id %}">{{ venue.name }}</a>
+                <p>Location: {{ venue.location }}</p>
+                <p>Capacity: {{ venue.capacity }}</p>
+                <p>Price: ${{ venue.rental_price }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
