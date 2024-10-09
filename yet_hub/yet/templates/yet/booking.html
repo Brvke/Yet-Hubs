@@ -1,4 +1,4 @@
-<!-- rental/templates/rental/create_booking.html -->
+<!-- yet/templates/yet/create_booking.html -->
 
 {% extends 'yet/base.html' %}
 
@@ -8,7 +8,7 @@
     <h1>Book {{ venue.name }}</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.as_p }}  <!-- Render the form fields -->
         <button type="submit" class="btn btn-success">Confirm Booking</button>
     </form>
 {% endblock %}

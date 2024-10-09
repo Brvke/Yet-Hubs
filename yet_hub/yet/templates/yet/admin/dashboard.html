@@ -1,0 +1,49 @@
+<!-- yet/templates/admin/dashboard.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Admin Dashboard</h1>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Venues</h5>
+                    <p class="card-text">{{ total_venues }}</p>
+                    <a href="{% url 'venue_list' %}" class="btn btn-primary">View Venues</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Bookings</h5>
+                    <p class="card-text">{{ total_bookings }}</p>
+                    <a href="{% url 'booking_list' %}" class="btn btn-primary">View Bookings</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">{{ total_users }}</p>
+                    <a href="{% url 'user_list' %}" class="btn btn-primary">View Users</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Total Reviews</h5>
+                    <p class="card-text">{{ total_reviews }}</p>
+                    <a href="{% url 'review_list' %}" class="btn btn-primary">View Reviews</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

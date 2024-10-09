@@ -1,0 +1,14 @@
+<!-- yet/templates/yet/submit_review.html -->
+
+{% extends 'yet/base.html' %}
+
+{% block title %}Review {{ venue.name }}{% endblock %}
+
+{% block content %}
+    <h1>Review {{ venue.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Render the form fields -->
+        <button type="submit" class="btn btn-success">Submit Review</button>
+    </form>
+{% endblock %}

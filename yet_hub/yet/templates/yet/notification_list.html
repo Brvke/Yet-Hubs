@@ -1,0 +1,21 @@
+<!-- yet/templates/yet/notification_list.html -->
+
+{% extends 'yet/base.html' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+    <h1>Notifications</h1>
+    <ul>
+        {% for notification in notifications %}
+            <li>
+                <strong>{{ notification.created_at }}:</strong> {{ notification.message }}
+                {% if not notification.is_read %}
+                    <span>(New)</span>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>No notifications available.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

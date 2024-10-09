@@ -1,0 +1,14 @@
+<!-- yet/templates/yet/create_venue.html -->
+
+{% extends 'yet/base.html' %}
+
+{% block title %}Add New Venue{% endblock %}
+
+{% block content %}
+    <h1>Add New Venue</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Render the form fields -->
+        <button type="submit" class="btn btn-success">Create Venue</button>
+    </form>
+{% endblock %}

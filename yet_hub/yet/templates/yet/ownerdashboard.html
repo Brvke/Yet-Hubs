@@ -1,36 +1,59 @@
-<!-- rental/templates/rental/owner_dashboard.html -->
+<!-- yet/templates/yet/owner_dashboard.html -->
 
 {% extends 'yet/base.html' %}
 
 {% block title %}Owner Dashboard{% endblock %}
 
 {% block content %}
-    <h1>Your Venues</h1>
-    <ul>
-        {% for venue in venues %}
-            <li>{{ venue.name }} - {{ venue.location }}</li>
-        {% endfor %}
-    </ul>
+    <div class="container mt-5">
+        <h1>Owner Dashboard</h1>
 
-    <h2>Your Bookings</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Venue</th>
-                <th>User</th>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for booking in bookings %}
-            <tr>
-                <td>{{ booking.venue.name }}</td>
-                <td>{{ booking.user.username }}</td>
-                <td>{{ booking.booking_date }}</td>
-                <td>{{ booking.status }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <div class="mb-4">
+            <h2>Your Venues</h2>
+            <ul class="list-group">
+                {% for venue in venues %}
+                    <li class="list-group-item">
+                        <strong>{{ venue.name }}</strong> - {{ venue.location }} (Capacity: {{ venue.capacity }})
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No venues added yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="mb-4">
+            <h2>Booking Summary</h2>
+            <p>Total Bookings: {{ total_bookings }}</p>
+            <p>Total Revenue: ${{ total_revenue }}</p>
+            <h3>Recent Bookings</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Venue</th>
+                        <th>User</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.venue.name }}</td>
+                        <td>{{ booking.user.username }}</td>
+                        <td>{{ booking.booking_date }}</td>
+                        <td>{{ booking.status }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No bookings found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <a href="{% url 'create_venue' %}" class="btn btn-primary">Add New Venue</a>
+        </div>
+    </div>
 {% endblock %}

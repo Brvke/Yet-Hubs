@@ -82,9 +82,9 @@ WSGI_APPLICATION = 'yet_hub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'yet',
-        'USER': 'yetuser',
-        'PASSWORD': 'your_db_password',
+        'NAME': 'brvke',
+        'USER': 'brvke1',
+        'PASSWORD': 'brvke123',
         'HOST': 'localhost',  
         'PORT': '5432',
     }
