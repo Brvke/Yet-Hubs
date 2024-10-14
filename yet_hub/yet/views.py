@@ -12,28 +12,9 @@ def index(request):
     return render(request, 'yet/index.html')
 
 @login_required
-def create_venue(request):
-    if request.method == "POST":
-        form = VenueForm(request.POST)
-        if form.is_valid():
-            venue = form.save(commit=False)
-            venue.owner = request.user
-            venue.save() 
-            return redirect('yet/owner_dashboard')
-    else:
-        form = VenueForm()
-    
-    return render(request, 'yet/create_venue.html', {'form': form})
-
-@login_required
 def venue_detail(request, venue_id):
     venue = get_object_or_404(Venue, id=venue_id)
     return render(request, 'yet/venue_detail.html', {'venue': venue})
-
-@login_required
-def venue_list(request):
-    venues = Venue.objects.all()  # Retrieve all venues
-    return render(request, 'yet/venue_list.html', {'venues': venues})
 
 def signup(request):
     if request.method == 'POST':
@@ -85,26 +66,20 @@ def create_booking(request, venue_id):
     
     return render(request, 'yet/create_booking.html', {'form': form, 'venue': venue})
 
-
-def notification_list(request):
-    notifications = Notification.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'yet/notification_list.html', {'notifications': notifications})
-
-
-def submit_review(request, venue_id):
+@login_required
+def create_review(request, venue_id):
     venue = get_object_or_404(Venue, id=venue_id)
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.user = request.user
             review.venue = venue
+            review.user = request.user
             review.save()
-            return redirect('yet/venue_detail', venue_id=venue.id)
+            return redirect('venue_detail', pk=venue_id)
     else:
         form = ReviewForm()
-        
-    return render(request, 'yet/submit_review.html', {'form': form, 'venue': venue})
+    return render(request, 'venue_detail.html', {'form': form, 'venue': venue})
 
 
 # admin dashboard
@@ -139,13 +114,25 @@ def owner_dashboard(request):
     venues = Venue.objects.filter(owner=user)
     bookings = Booking.objects.filter(venue__owner=user)
 
-    # Optional: Calculate total bookings and total revenue
+    # Optional: Calculate total bookings
     total_bookings = bookings.count()
-    total_revenue = sum(booking.venue.rental_price for booking in bookings)
 
     return render(request, 'yet/owner_dashboard.html', {
         'venues': venues,
         'bookings': bookings,
         'total_bookings': total_bookings,
-        'total_revenue': total_revenue,
     })
+
+@login_required
+def create_venue(request):
+    if request.method == "POST":
+        form = VenueForm(request.POST)
+        if form.is_valid():
+            venue = form.save(commit=False)
+            venue.owner = request.user
+            venue.save() 
+            return redirect('yet/owner_dashboard')
+    else:
+        form = VenueForm()
+    
+    return render(request, 'yet/create_venue.html', {'form': form})
