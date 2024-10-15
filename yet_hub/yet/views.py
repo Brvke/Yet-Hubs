@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test 
-from .models import Venue, Booking, Notification, Review
+from .models import Venue, Booking, Notification, Review, Profile
 from django.contrib.auth import authenticate, login
 from .forms import SignupForm, BookingForm, VenueForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import LoginForm, ReviewForm
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 def index(request):
     return render(request, 'yet/index.html')
@@ -23,7 +24,7 @@ def signup(request):
         if form.is_valid():
             form.save()
 
-            return redirect('login')
+            return redirect(reverse('login'))
     else:
         form = SignupForm()
 
@@ -41,7 +42,7 @@ def user_login(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'Logged in successfully.')
-                return redirect('owner_dashboard')
+                return redirect(reverse('base.html'))
             else:
                 messages.error(request, 'Invalid username or password.')
     else:
@@ -111,9 +112,10 @@ def venue_list(request):
 @login_required
 def owner_dashboard(request):
     user = request.user
-    venues = Venue.objects.filter(owner=user)
-    bookings = Booking.objects.filter(venue__owner=user)
-
+    profile = get_object_or_404(Profile, user_type=user)
+    venues = Venue.objects.filter(owner=profile)
+    bookings = Booking.objects.filter(venue__owner=profile)
+    owner_dashboard = reverse('owner_dashboard')
     # Optional: Calculate total bookings
     total_bookings = bookings.count()
 
@@ -121,6 +123,7 @@ def owner_dashboard(request):
         'venues': venues,
         'bookings': bookings,
         'total_bookings': total_bookings,
+        'dashboard_url': owner_dashboard,
     })
 
 @login_required

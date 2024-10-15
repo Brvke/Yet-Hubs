@@ -47,12 +47,6 @@ class BookingForm(forms.ModelForm):
         widgets = {
             'booking_date': forms.DateInput(attrs={'type': 'date'}),
         }
-
-class BookingForm(forms.ModelForm):
-    class Meta:
-        model = Booking
-        fields = ['venue', 'start_time', 'end_time', 'guests']
-
     def clean_booking_date(self):
         booking_date = self.cleaned_data.get('booking_date')
         if booking_date < datetime.date.today():
