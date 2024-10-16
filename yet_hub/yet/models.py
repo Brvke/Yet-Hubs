@@ -13,7 +13,7 @@ class Profile(models.Model):
     user_type = models.CharField(max_length=10, choices=USER_TYPES, default='User')
 
     def __str__(self):
-        return self.user.username
+        return self.user_type
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -29,8 +29,8 @@ class Venue(models.Model):
         ('Birthday', 'Birthday Party'),
         ('Other', 'Other'),
     ]
-    
-    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, limit_choices_to={'user_type': 'Owner'})
+    #owner = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'profile__user_type': 'Owner'})
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=200)
     capacity = models.IntegerField()
@@ -38,7 +38,7 @@ class Venue(models.Model):
     description = models.TextField()
     event_type = models.CharField(max_length=20, choices=EVENT_TYPES)
     created_at = models.DateTimeField(auto_now_add=True)
-
+    image = models.ImageField(upload_to='venues_images/', blank=True, null=True)
     def __str__(self):
         return self.name
 
@@ -65,12 +65,12 @@ class Booking(models.Model):
 
 # image model
 # allow venues to have multiple images
-class VenueImage(models.Model):
+"""class VenueImage(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='venue_images/')
 
     def __str__(self):
-        return f"Image for {self.venue.name}"
+        return f"Image for {self.venue.name}" """
 
 
 
@@ -88,11 +88,11 @@ class Review(models.Model):
 
 
 # notification model
-class Notification(models.Model):
+""" class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Notification for {self.user.username}"
+        return f"Notification for {self.user.username}" """

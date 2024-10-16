@@ -1,0 +1,38 @@
+{% extends 'yet/base.html' %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="text-center mb-4">Search Results</h1>
+    
+    {% if venues %}
+        <div class="row">
+            {% for venue in venues %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <a href="{% url 'yet:venue_detail' venue.id %}">
+                            <img src="{{ venue.img.url }}" class="card-img-top" alt="{{ venue.name }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ venue.name }}</h5>
+                            <p class="card-text">
+                                <strong>Location:</strong> {{ venue.location }}<br>
+                                <strong>Capacity:</strong> {{ venue.capacity }}<br>
+                                <strong>Price:</strong> ${{ venue.price_by_night }}
+                            </p>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="{% url 'yet:venue_detail' venue.id %}" class="btn btn-teal">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            No venues found for your search. Try adjusting your search criteria.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

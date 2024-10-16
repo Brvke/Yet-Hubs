@@ -1,45 +1,62 @@
 {% extends 'yet/base.html' %}
 
-{% block title %}sign up{% endblock %}
+<div class="space-x-6">
+    <!-- Only show the dashboard link for owners -->
+    {% if user.is_authenticated and user.profile.user_type == 'Owner' %}
+        <a href="{% url 'yet:owner_dashboard' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Dashboard</a>
+    {% endif %}
+    <a href="{% url 'yet:logout' %}" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Logout</a>
+</div>
+
+{% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
-    <h1 class="mb-6 text-3xl">Sign up</h1>
+<div class="px-6 py-6">
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl">Sign up</h1>
 
-    <form method="post" action=".">
+        <!-- Changed method to POST for form submission -->
+        <form method="post" action="{% url 'yet:signup' %}">
         {% csrf_token %}
 
-        <div class="mb-3">
-            <label class="inline-block mb-2">Username</label><br>
-            {{ form.username }}
-        </div>
+            <!-- Removed hardcoded input fields and replaced them with form fields -->
+            <div class="mb-3">
+                <label class="inline-block mb-2">Username</label><br>
+                {{ form.username }}
+            </div>
 
-        <div class="mb-3">
-            <label class="inline-block mb-2">Email</label><br>
-            {{ form.email }}
-        </div>
+            <div class="mb-3">
+                <label class="inline-block mb-2">Email</label><br>
+                {{ form.email }}
+            </div>
 
-        <div class="mb-3">
-            <label class="inline-block mb-2">Password</label><br>
-            {{ form.password1 }}
-        </div>
+            <div class="mb-3">
+                <label class="inline-block mb-2">Password</label><br>
+                {{ form.password1 }}
+            </div>
 
-        <div class="mb-3">
-            <label class="inline-block mb-2">Repeat password</label><br>
-            {{ form.password2 }}
-        </div>
+            <div class="mb-3">
+                <label class="inline-block mb-2">Repeat password</label><br>
+                {{ form.password2 }}
+            </div>
 
-        {% if form.errors or form.non_field_errors %}
+            <div class="mb-3">
+                <label class="inline-block mb-2">User Type</label><br>
+                {{ form.user_type }}
+            </div>
+
+            <!-- Display form validation errors -->
+            {% if form.errors %}
             <div class="mb-3 p-6 bg-red-100 rounded-xl">
                 {% for field in form %}
                     {{ field.errors }}
                 {% endfor %}
-
                 {{ form.non_field_errors }}
             </div>
-        {% endif %}
+            {% endif %}
 
-        <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Submit</button>
-    </form>
+            <input type="submit" class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white" value="Submit" />
+        </form>
+    </div>
 </div>
 {% endblock %}

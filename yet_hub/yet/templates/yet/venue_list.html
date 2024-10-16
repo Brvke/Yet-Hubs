@@ -1,19 +1,42 @@
-<!-- yet/templates/yet/venue_list.html -->
-
 {% extends 'yet/base.html' %}
 
-{% block title %}Available Venues{% endblock %}
+{% block title %}Browse venues{% endblock %}
 
 {% block content %}
-    <h1>Available Venues</h1>
-    <ul class="list-group">
+    <h1 class="text-3xl font-semibold mb-6">Available Venues</h1>
+
+    <!-- Search Form -->
+    <form method="get" action="{% url 'yet:venue_list' %}" class="mb-8">
+        <input type="text" name="q" placeholder="Search by name, location, or description" class="border rounded px-4 py-2">
+        <button type="submit" class="bg-blue-500 text-white rounded px-4 py-2 ml-2">Search</button>
+    </form>
+
+    <!-- Venue Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for venue in venues %}
-            <li class="list-group-item">
-                <strong><a href="{% url 'venue_detail' venue.id %}">{{ venue.name }}</a></strong> - {{ venue.location }} (Capacity: {{ venue.capacity }})
-                <p>Rental Price: ${{ venue.rental_price }}</p>
-            </li>
+            <div class="border rounded-lg overflow-hidden shadow-lg bg-white">
+                <!-- Venue Image -->
+                {% if venue.image %}
+                    <img src="{{ venue.image.url }}" alt="{{ venue.name }}" class="w-full h-48 object-cover">
+                {% else %}
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                        No Image Available
+                    </div>
+                {% endif %}
+
+                <!-- Venue Details -->
+                <div class="p-4">
+                    <h2 class="text-xl font-bold mb-2">
+                        <a href="{% url 'yet:venue_detail' venue.id %}" class="hover:underline">{{ venue.name }}</a>
+                    </h2>
+                    <p class="text-gray-600">{{ venue.location }}</p>
+                    <p class="text-gray-500 text-sm">Capacity: {{ venue.capacity }}</p>
+                    <p class="text-green-600 font-semibold">Rental Price: ${{ venue.rental_price }}</p>
+                    <p class="text-gray-700 mt-2">{{ venue.description|truncatewords:20 }}</p>
+                </div>
+            </div>
         {% empty %}
-            <li class="list-group-item">No venues available.</li>
+            <p>No venues available.</p>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
