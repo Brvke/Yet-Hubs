@@ -209,7 +209,7 @@ def signup(request):
             messages.success(request, 'Account created successfully! Please log in.')
 
             # Redirect to the login page after signup
-            return redirect('yet:login')  # Ensure 'yet:login' is the correct name for your login URL
+            return redirect('yet:index')  # Ensure 'yet:login' is the correct name for your login URL
     else:
         form = SignupForm()
 
