@@ -23,7 +23,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='yet/login.html', authentication_form=LoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     #path('login_/', CustomLoginView.as_view(), name='login_'),
-    path('search/', views.search_venues, name='search_result'),
+    path('search/', views.search_result, name='search_result'),
 ]
 
 

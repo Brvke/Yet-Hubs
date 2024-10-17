@@ -1,0 +1,32 @@
+{% extends 'yet/base.html' %}
+
+{% block title %}Book {{ venue.name }}{% endblock %}
+
+{% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const disabledDates = ['2024-10-20', '2024-10-25'];  // Example: Specific dates to disable
+        const input = document.querySelector('.booking-date-input');
+
+        input.addEventListener('input', function () {
+            const selectedDate = new Date(this.value);
+            const selectedDateStr = this.value;
+
+            // Disable if selected date matches disabled dates or weekend (optional)
+            if (disabledDates.includes(selectedDateStr) || selectedDate.getDay() === 0 || selectedDate.getDay() === 6) {
+                alert('This date is unavailable');
+                this.value = '';  // Clear the invalid date
+            }
+        });
+    });
+</script>
+<div class="container mx-auto my-8 p-6 bg-white rounded-lg shadow-md max-w-lg">
+    <h1 class="text-3xl font-bold mb-6 text-center">Book {{ venue.name }}</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.as_p }} <!-- Render the form fields -->
+        <button type="submit" class="w-full bg-teal-500 text-white py-3 rounded-lg hover:bg-teal-600">Confirm
+            Booking</button>
+    </form>
+</div>
+{% endblock %}

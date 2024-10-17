@@ -5,15 +5,16 @@
 {% block title %}{{ venue.name }}{% endblock %}
 
 {% block content %}
-    <div class="container mt-5">
-        <h1>{{ venue.name }}</h1>
-        <p><strong>Location:</strong> {{ venue.location }}</p>
-        <p><strong>Capacity:</strong> {{ venue.capacity }}</p>
-        <p><strong>Rental Price:</strong> ${{ venue.rental_price }}</p>
-        <p><strong>Description:</strong> {{ venue.description }}</p>
-        <p><strong>Event Type:</strong> {{ venue.event_type }}</p>
+<div class="container mt-5">
+    <img src="{{ venue.image.url }}" alt="{{ venue.name }}" class="w-full h-48 object-cover">
+    <h1>{{ venue.name }}</h1>
+    <p><strong>Location:</strong> {{ venue.location }}</p>
+    <p><strong>Capacity:</strong> {{ venue.capacity }}</p>
+    <p><strong>Rental Price:</strong> ${{ venue.rental_price }}</p>
+    <p><strong>Description:</strong> {{ venue.description }}</p>
+    <p><strong>Event Type:</strong> {{ venue.event_type }}</p>
 
-        <!-- Booking link -->
-        <a href="{% url 'create_booking' venue.id %}" class="btn btn-primary">Book Now</a>
-    </div>
+    <!-- Booking link -->
+     <a href="{% url 'yet:create_booking' venue.id %}" class="btn btn-primary">Book Now</a>
+</div>
 {% endblock %}

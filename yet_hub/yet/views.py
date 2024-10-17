@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib.auth.views import LoginView
 from django.db.models import Q
+from datetime import datetime  # Correct import statement
 
 """
 def index(request):
@@ -174,8 +175,10 @@ from .forms import SignupForm, BookingForm, VenueForm, LoginForm, ReviewForm, Cu
 
 # Homepage view
 def index(request):
+     # Query for featured venues
+    venues = Venue.objects.all()  # Fetch all venues
     # Fetch all venues
-    return render(request, 'yet/index.html')
+    return render(request, 'yet/index.html',  {'venues': venues})
 
 # Signup view for both users and owners
 from django.shortcuts import render, redirect
@@ -194,20 +197,23 @@ def signup(request):
         
         if form.is_valid():
             user = form.save()
-            
             user_type = form.cleaned_data.get('user_type')
             
-            Profile.objects.create(user=user, user_type=user_type)
+            # Use get_or_create to avoid IntegrityError
+            profile, created = Profile.objects.get_or_create(user=user, defaults={'user_type': user_type})
 
+            # Log the user in
             login(request, user)
             
-            return redirect(reverse('login')) 
+            # Add a success message
+            messages.success(request, 'Account created successfully! Please log in.')
+
+            # Redirect to the login page after signup
+            return redirect('yet:login')  # Ensure 'yet:login' is the correct name for your login URL
     else:
         form = SignupForm()
 
     return render(request, 'yet/signup.html', {'form': form})
-
-
 
 # Login view
 
@@ -246,6 +252,7 @@ def venue_detail(request, venue_id):
 # Create booking (for users)
 @login_required
 def create_booking(request, venue_id):
+    
     venue = get_object_or_404(Venue, id=venue_id)
     
     if request.method == "POST":
@@ -255,29 +262,60 @@ def create_booking(request, venue_id):
             booking.user = request.user
             booking.venue = venue
             booking.save()
-            return redirect('venue_detail', venue_id=venue_id)
+            return redirect('yet:venue_detail',venue_id=venue_id)
     else:
         form = BookingForm()
 
     return render(request, 'yet/create_booking.html', {'form': form, 'venue': venue})
 
 # Search functionality for users
-def search_venues(request):
-    query = request.GET.get('q')
-    venues = Venue.objects.all()
+def search_result(request):
+     # Get parameters from the GET request
+    location_query = request.GET.get('location')
+    date_query = request.GET.get('date')  # Adjusted to match the form input name
+    event_type = request.GET.get('event_type')
 
-    if query:
-        venues = venues.filter(
-            Q(name__icontains=query) | 
-            Q(location__icontains=query) | 
-            Q(capacity__gte=query)
-        )
+    venues = Venue.objects.all()  # Start with all venues
 
-    return render(request, 'yet/search_results.html', {'venues': venues})
+    # Filter by location if provided
+    if location_query:
+        venues = venues.filter(location__icontains=location_query)
+
+
+    # # Filter by event type if provided
+    if event_type and event_type != 'all':
+            venues = venues.filter(event_type__iexact=event_type)  # Case-insensitive match
+
+
+
+
+    return render(request, 'yet/search_result.html', {'venues': venues})
+
 
 # View for all venues   
 def venue_list(request):
-    venues = Venue.objects.all()
+    query = request.GET.get('q')  # Get the search query from the GET request
+    date_query = request.GET.get('available_date')  # Get the date for availability
+    venues = Venue.objects.all()  # Start with all venues
+
+    if query:
+        # Filter venues based on name, location, or description
+        venues = venues.filter(
+            Q(name__icontains=query) | 
+            Q(location__icontains=query) |
+            Q(description__icontains=query)
+        )
+    
+    if date_query:
+        try:
+            # Convert the string date_query to a date object
+            available_date = datetime.strptime(date_query, '%Y-%m-%d').date()
+            # Filter venues available on that date
+            venues = venues.filter(available_date=available_date)
+        except ValueError:
+            # Handle invalid date format
+            pass
+
     return render(request, 'yet/venue_list.html', {'venues': venues})
 
 def venue_detail(request, venue_id):

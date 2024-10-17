@@ -10,9 +10,10 @@
         <div class="row">
             {% for venue in venues %}
                 <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
+                    <div class="card h-100 shadow-sm max-w-lg p-4">
                         <a href="{% url 'yet:venue_detail' venue.id %}">
-                            <img src="{{ venue.img.url }}" class="card-img-top" alt="{{ venue.name }}">
+                            <!-- Adjust image size using Tailwind classes -->
+                            <img src="{{ venue.image.url }}" class="card-img-top object-cover h-48 w-full" alt="{{ venue.name }}">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">{{ venue.name }}</h5>

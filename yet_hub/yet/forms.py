@@ -76,16 +76,40 @@ class SignupForm(UserCreationForm):
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['venue', 'booking_date', 'event_type']
+        fields = ['booking_date', 'event_type']
 
         widgets = {
-            'booking_date': forms.DateInput(attrs={'type': 'date'}),
+            'booking_date': forms.DateInput(attrs={
+                'type': 'date',
+                'min': datetime.date.today().strftime('%Y-%m-%d')  # Disable past dates,
+                
+            }),
         }
-    def clean_booking_date(self):
-        booking_date = self.cleaned_data.get('booking_date')
-        if booking_date < datetime.date.today():
-            raise forms.ValidationError("Booking date cannot be in the past.")
-        return booking_date
+
+    # def __init__(self, *args, **kwargs):
+    #     self.venue = kwargs.pop('venue', None)  # Expect venue to be passed
+    #     super().__init__(*args, **kwargs)
+        
+    #     if self.venue:
+    #         booked_dates = Booking.objects.filter(venue=self.venue).values_list('booking_date', flat=True)
+    #         # Pass booked dates as a comma-separated list to the template (for JavaScript)
+    #         self.fields['booking_date'].widget.attrs.update({
+    #             'booked-dates': ','.join([date.strftime('%Y-%m-%d') for date in booked_dates])
+    #         })
+
+    # def clean_booking_date(self):
+    #     booking_date = self.cleaned_data.get('booking_date')
+    #     today = datetime.date.today()
+
+    #     # Check if the selected booking date is in the past
+    #     if booking_date <= today:
+    #         raise forms.ValidationError("Booking date must be from tomorrow onward.")
+
+    #     # Check if the date is already booked for the given venue
+    #     if Booking.objects.filter(venue=self.venue, booking_date=booking_date).exists():
+    #         raise forms.ValidationError("This date is already booked. Please choose another date.")
+
+    #     return booking_date
 
 # venue form
 class VenueForm(forms.ModelForm):
