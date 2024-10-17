@@ -5,48 +5,47 @@
 {% block content %}
 {% load static %}
 
+<div class="max-w-full">
 
-<div classs="max-w-full">
-
-    <section class="hero bg-cover bg-center py-16 text-center  relative"
-        style="background-image: url('{% static 'ibrahim.jpg' %}'); border-radius: 10px;">
+    <!-- Hero Section -->
+    <section class="hero bg-cover bg-center py-20 text-center relative rounded-lg shadow-lg overflow-hidden"
+        style="background-image: url('{% static 'ibrahim.jpg' %}');">
         <!-- Overlay Div -->
-        <div class="overlay absolute top-0 left-0 right-0 bottom-0 bg-green-500 opacity-60"></div>
+        <div class="overlay absolute top-0 left-0 right-0 bottom-0 bg-green-600 opacity-50"></div>
 
-        <div class="container mx-auto relative z-10"> <!-- Set z-index for content -->
-            <h1 class="text-5xl font-bold mb-6 text-white">Find Your Perfect Event Venue</h1>
-            <form class="search-bar flex justify-center space-x-4" method="get" action="{% url 'yet:search_result' %}">
-                <input type="text" name="location" placeholder="Location" class="p-3 rounded-lg" required>
-                <input type="date" name="date" class="p-3 rounded-lg" required>
-                <select name="event_type" class="p-3 rounded-lg">
+        <div class="container mx-auto relative z-10">
+            <h1 class="text-5xl font-bold mb-8 text-white drop-shadow-lg">Find Your Perfect Event Venue</h1>
+            <form class="search-bar flex flex-wrap justify-center space-x-4" method="get" action="{% url 'yet:search_result' %}">
+                <input type="text" name="location" placeholder="Location" class="p-3 rounded-lg shadow-lg w-full md:w-auto mb-4 md:mb-0" required>
+                <input type="date" name="date" class="p-3 rounded-lg shadow-lg w-full md:w-auto mb-4 md:mb-0" required>
+                <select name="event_type" class="p-3 rounded-lg shadow-lg w-full md:w-auto mb-4 md:mb-0">
                     <option value="all">All Event Types</option>
                     <option value="wedding">Wedding</option>
                     <option value="conference">Conference</option>
                     <option value="concert">Concert</option>
                     <option value="birthday">Birthday</option>
-                    <!-- Add more event types as needed -->
                 </select>
-                <button type="submit"
-                    class="bg-teal-500 text-white py-3 px-6 rounded-lg hover:bg-teal-600">Search</button>
+                <button type="submit" class="bg-teal-500 text-white py-3 px-6 rounded-lg hover:bg-teal-600 shadow-lg transition duration-300 ease-in-out transform hover:scale-105">Search</button>
             </form>
         </div>
     </section>
+
     <!-- Featured Venues Section -->
-    <section class="featured-venues py-16">
+    <section class="featured-venues py-16 bg-gray-50">
         <div class="container mx-auto">
             <div class="section-header text-center mb-12">
-                <h2 class="text-3xl font-semibold">Featured Venues</h2>
-                <p class="text-lg">Explore our top-rated event spaces</p>
+                <h2 class="text-4xl font-semibold text-gray-800">Featured Venues</h2>
+                <p class="text-lg text-gray-600">Explore our top-rated event spaces</p>
             </div>
-            <div class="venue-content grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="venue-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {% for venue in venues %}
-                <div class="venue bg-white shadow-lg rounded-lg overflow-hidden">
+                <div class="venue bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-300 hover:scale-105">
                     <a href="{% url 'yet:venue_detail' venue.id %}">
                         <img src="{{ venue.image.url }}" alt="Venue Image" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold">{{ venue.name }}</h3>
-                            <p class="text-gray-600">{{ venue.description }}</p>
-                            <p class="text-lg font-bold mt-2">${{ venue.price_by_night }}</p>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-gray-800">{{ venue.name }}</h3>
+                            <p class="text-gray-600">{{ venue.description|truncatewords:20 }}</p>
+                            <p class="text-lg font-bold text-teal-600 mt-2">${{ venue.price_by_night }}</p>
                         </div>
                     </a>
                 </div>
@@ -56,63 +55,52 @@
             </div>
         </div>
     </section>
+
     <!-- How It Works Section -->
-    <section class="how-it-works py-16 bg-gray-100">
+    <section class="how-it-works py-16 bg-white">
         <div class="container mx-auto">
             <div class="section-header text-center mb-12">
-                <h2 class="text-3xl font-semibold">How It Works</h2>
-                <p class="text-lg">Learn more about how our platform works</p>
+                <h2 class="text-4xl font-semibold text-gray-800">How It Works</h2>
+                <p class="text-lg text-gray-600">Learn more about how our platform works</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="single-how-works text-center p-8 bg-white shadow-lg rounded-lg">
-                    <div class="single-how-works-icon mb-6">
-                        <i class="flaticon-lightbulb-idea text-4xl text-teal-500"></i>
-                    </div>
+                <div class="single-how-works text-center p-8 bg-gray-50 shadow-lg rounded-lg transform transition duration-300 hover:scale-105">
+                    <i class="flaticon-lightbulb-idea text-4xl text-teal-500 mb-6"></i>
                     <h2 class="text-xl font-bold mb-4">Choose <span class="text-teal-500">what to do</span></h2>
-                    <p class="text-gray-600 mb-4">Select the type of event you're planning to get tailored
-                        recommendations.</p>
-                    <button class="bg-teal-500 text-white py-2 px-6 rounded-lg hover:bg-teal-600">Read More</button>
+                    <p class="text-gray-600">Select the type of event you're planning to get tailored recommendations.</p>
                 </div>
-                <div class="single-how-works text-center p-8 bg-white shadow-lg rounded-lg">
-                    <div class="single-how-works-icon mb-6">
-                        <i class="flaticon-networking text-4xl text-teal-500"></i>
-                    </div>
+                <div class="single-how-works text-center p-8 bg-gray-50 shadow-lg rounded-lg transform transition duration-300 hover:scale-105">
+                    <i class="flaticon-networking text-4xl text-teal-500 mb-6"></i>
                     <h2 class="text-xl font-bold mb-4">Find <span class="text-teal-500">what you want</span></h2>
-                    <p class="text-gray-600 mb-4">Use our search tools to discover the perfect venue for your event.</p>
-                    <button class="bg-teal-500 text-white py-2 px-6 rounded-lg hover:bg-teal-600">Read More</button>
+                    <p class="text-gray-600">Use our search tools to discover the perfect venue for your event.</p>
                 </div>
-                <div class="single-how-works text-center p-8 bg-white shadow-lg rounded-lg">
-                    <div class="single-how-works-icon mb-6">
-                        <i class="flaticon-location-on-road text-4xl text-teal-500"></i>
-                    </div>
+                <div class="single-how-works text-center p-8 bg-gray-50 shadow-lg rounded-lg transform transition duration-300 hover:scale-105">
+                    <i class="flaticon-location-on-road text-4xl text-teal-500 mb-6"></i>
                     <h2 class="text-xl font-bold mb-4">Explore <span class="text-teal-500">amazing places</span></h2>
-                    <p class="text-gray-600 mb-4">Discover venues with detailed information, photos, and reviews.</p>
-                    <button class="bg-teal-500 text-white py-2 px-6 rounded-lg hover:bg-teal-600">Read More</button>
+                    <p class="text-gray-600">Discover venues with detailed information, photos, and reviews.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Testimonials Section -->
-    <section class="testimonials py-16">
+    <section class="testimonials py-16 bg-gray-100">
         <div class="container mx-auto">
             <div class="section-header text-center mb-12">
-                <h2 class="text-3xl font-semibold">What Our Clients Say</h2>
+                <h2 class="text-4xl font-semibold text-gray-800">What Our Clients Say</h2>
             </div>
             <div class="testimonial-container grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="testimonial bg-white p-6 shadow-lg rounded-lg">
+                <div class="testimonial bg-white p-6 shadow-lg rounded-lg transform transition duration-300 hover:scale-105">
                     <p class="text-gray-600 mb-4">"Great experience! The venue was perfect for our event."</p>
-                    <p class="font-bold">- Happy Customer</p>
+                    <p class="font-bold text-teal-600">- Happy Customer</p>
                 </div>
-                <div class="testimonial bg-white p-6 shadow-lg rounded-lg">
-                    <p class="text-gray-600 mb-4">"I highly recommend Event Hub. They helped me find the ideal venue for
-                        my wedding."</p>
-                    <p class="font-bold">- Satisfied Bride</p>
+                <div class="testimonial bg-white p-6 shadow-lg rounded-lg transform transition duration-300 hover:scale-105">
+                    <p class="text-gray-600 mb-4">"I highly recommend Event Hub. They helped me find the ideal venue for my wedding."</p>
+                    <p class="font-bold text-teal-600">- Satisfied Bride</p>
                 </div>
-                <div class="testimonial bg-white p-6 shadow-lg rounded-lg">
-                    <p class="text-gray-600 mb-4">"Event Hub made it easy for me to book a conference venue. The process
-                        was seamless."</p>
-                    <p class="font-bold">- Conference Organizer</p>
+                <div class="testimonial bg-white p-6 shadow-lg rounded-lg transform transition duration-300 hover:scale-105">
+                    <p class="text-gray-600 mb-4">"Event Hub made it easy for me to book a conference venue. The process was seamless."</p>
+                    <p class="font-bold text-teal-600">- Conference Organizer</p>
                 </div>
             </div>
         </div>

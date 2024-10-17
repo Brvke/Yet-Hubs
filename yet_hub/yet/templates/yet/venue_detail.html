@@ -5,16 +5,18 @@
 {% block title %}{{ venue.name }}{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <img src="{{ venue.image.url }}" alt="{{ venue.name }}" class="w-full h-48 object-cover">
-    <h1>{{ venue.name }}</h1>
-    <p><strong>Location:</strong> {{ venue.location }}</p>
-    <p><strong>Capacity:</strong> {{ venue.capacity }}</p>
-    <p><strong>Rental Price:</strong> ${{ venue.rental_price }}</p>
-    <p><strong>Description:</strong> {{ venue.description }}</p>
-    <p><strong>Event Type:</strong> {{ venue.event_type }}</p>
-
+<div class="container mt-10 p-6 bg-white shadow-lg rounded-lg flex flex-col items-center">
+    <img src="{{ venue.image.url }}" alt="{{ venue.name }}" class="w-full max-w-lg h-96 object-cover rounded-lg mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ venue.name }}</h1>
+    <div class="text-lg text-gray-700 space-y-3">
+        <p><strong>Location:</strong> {{ venue.location }}</p>
+        <p><strong>Capacity:</strong> {{ venue.capacity }}</p>
+        <p><strong>Rental Price:</strong> ${{ venue.rental_price }}</p>
+        <p><strong>Description:</strong> {{ venue.description }}</p>
+        <p><strong>Event Type:</strong> {{ venue.event_type }}</p>
+    </div>
     <!-- Booking link -->
-     <a href="{% url 'yet:create_booking' venue.id %}" class="btn btn-primary">Book Now</a>
+    <a href="{% url 'yet:create_booking' venue.id %}" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-md transition duration-300 ease-in-out transform hover:scale-105">Book Now</a>
 </div>
+
 {% endblock %}
